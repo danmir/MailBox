@@ -1,0 +1,39 @@
+{{#if message}}
+    <h1>{{message}}</h1>
+{{else}}
+    <div class="ui middle aligned center aligned grid">
+        <div class="column">
+            <h1>Послать сообщение</h1>
+            <div class="ui three column centered grid">
+                <div class="column"></div>
+                <div class="column"><form class="ui large form" action="send" method="post">
+                    <div class="ui stacked segment">
+                        <div class="field">
+                            <div class="ui left icon input">
+                                <i class="user icon"></i>
+                                <input type="text" name="user" placeholder="Username">
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="ui left icon input">
+                                <textarea name="message"></textarea>
+                            </div>
+                        </div>
+                        <input class="ui fluid large teal submit button" type="submit">
+                    </div>
+                </form>
+                </div>
+                <div class="column"></div>
+            </div>
+        </div>
+    </div>
+    <!--<form action="send" method="post">-->
+        <!--<label for="user">User</label>-->
+        <!--<input type="text" name="user" id="user" placeholder="Username">-->
+
+        <!--<label for="message">Message</label>-->
+        <!--<input id="message" type="text" name="message" placeholder="Text">-->
+
+        <!--<input type="submit">-->
+    <!--</form>-->
+{{/if}}
