@@ -1,17 +1,63 @@
 {{#if message}}
     <h1>{{message}}</h1>
 {{else}}
+    <script>
+        var sleep = null;
+        function waitForUser() {
+            if (sleep) {
+                console.log("clear timeout");
+                clearTimeout(sleep);
+                sleep = null;
+                var nameInput = document.getElementById('name-input');
+                var field1 = document.getElementById('field-1');
+                if (field1) {
+                    nameInput.removeChild(field1);
+                }
+                waitForUser();
+            } else {
+                console.log("create timeout");
+                sleep = setTimeout(function(){
+                    var inp = document.getElementById('inp').value;
+                    var xhr = new XMLHttpRequest();
+                    var json = JSON.stringify({
+                        user: inp
+                    });
+                    xhr.open('POST', '/allusers', false);
+                    xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+                    xhr.send(json);
+                    console.log(json);
+                    if (xhr.status != 200) {
+                        console.log(xhr.status);
+                    }
+                    var parsed = JSON.parse(xhr.responseText);
+                    console.log(parsed);
+                    var nameInput = document.getElementById('name-input');
+                    var div1 = document.createElement('div');
+                    div1.className = "field";
+                    div1.id = "field-1";
+                    var bigString = "<ul>";
+                    for (var key in parsed.users) {
+                        bigString += "<li>" + parsed.users[key] + "</li>";
+                    }
+                    bigString += "</ul>";
+                    div1.innerHTML = bigString;
+                    nameInput.appendChild(div1);
+                }, 2000);
+            }
+        }
+    </script>
     <div class="ui middle aligned center aligned grid">
         <div class="column">
             <h1>Послать сообщение</h1>
             <div class="ui three column centered grid">
                 <div class="column"></div>
-                <div class="column"><form class="ui large form" action="send" method="post">
-                    <div class="ui stacked segment">
+                <div class="column">
+                    <form class="ui large form" action="send" name="messages" method="post">
+                    <div class="ui stacked segment" id="name-input">
                         <div class="field">
                             <div class="ui left icon input">
                                 <i class="user icon"></i>
-                                <input type="text" name="user" placeholder="Username">
+                                <input id="inp" onkeyup="waitForUser()" type="text" name="user" placeholder="Username">
                             </div>
                         </div>
                         <div class="field">
@@ -27,13 +73,4 @@
             </div>
         </div>
     </div>
-    <!--<form action="send" method="post">-->
-        <!--<label for="user">User</label>-->
-        <!--<input type="text" name="user" id="user" placeholder="Username">-->
-
-        <!--<label for="message">Message</label>-->
-        <!--<input id="message" type="text" name="message" placeholder="Text">-->
-
-        <!--<input type="submit">-->
-    <!--</form>-->
 {{/if}}
